@@ -5,6 +5,7 @@ type MySqlConfig struct {
 	Password string `mapstructure:"password"`
 	Port     int    `mapstructure:"port"`
 	Host     string `mapstructure:"host"`
+	Database string `mapstructure:"database"`
 }
 
 type ServerConfig struct {

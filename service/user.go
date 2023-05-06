@@ -1,7 +1,6 @@
 package service
 
 import (
-	"context"
 	"shop-mall/global"
 	"shop-mall/model"
 	"shop-mall/model/do"
@@ -26,10 +25,28 @@ type UserListRes struct {
 	Total int
 }
 
-type UserService struct {
+type UserService interface {
+	GetUserList(req model.UserGetListInput) (rsp *model.UserGetListOutput, err error)
 }
 
-func (s *UserService) GetUserList(_ context.Context, req model.UserGetListInput) (rsp *model.UserGetListOutput, err error) {
+var localUser UserService
+
+func User() UserService {
+	if localUser == nil {
+		panic("没有初始化用户服务")
+	}
+	return localUser
+}
+
+type (
+	sUser struct{}
+)
+
+func init() {
+	localUser = &sUser{}
+}
+
+func (s *sUser) GetUserList(in model.UserGetListInput) (rsp *model.UserGetListOutput, err error) {
 	var users []do.User
 	result := global.DB.Find(&users)
 
@@ -41,10 +58,10 @@ func (s *UserService) GetUserList(_ context.Context, req model.UserGetListInput)
 
 	rsp.Total = int32(result.RowsAffected)
 
-	rsp.Page = req.Page
-	rsp.Size = req.Size
+	rsp.Page = in.Page
+	rsp.PageSize = in.PageSize
 
-	global.DB.Scopes(utility.Paginate(int(req.Page), int(req.Size))).Find(&users)
+	global.DB.Scopes(utility.Paginate(int(in.Page), int(in.PageSize))).Find(&users)
 
 	for _, user := range users {
 		userInfo := model.UserGetListItem{

@@ -14,11 +14,12 @@ import (
 )
 
 func InitDB() {
-	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/shopping_mall?charset=utf8mb4&parseTime=True&loc-Local",
+	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc-Local",
 		global.ServerConfig.MySql.UserName,
 		global.ServerConfig.MySql.Password,
 		global.ServerConfig.MySql.Host,
 		global.ServerConfig.MySql.Port,
+		global.ServerConfig.MySql.Database,
 	)
 
 	newLogger := logger.New(

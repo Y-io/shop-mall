@@ -1,9 +1,24 @@
 package validator
 
 import (
+	"github.com/gin-gonic/gin"
 	"github.com/go-playground/validator/v10"
+	"go.uber.org/zap"
+	"net/http"
 	"regexp"
+	"shop-mall/global"
+	"strings"
 )
+
+func removeTopStruct(fields map[string]string) map[string]string {
+	rsp := map[string]string{}
+
+	for field, err := range fields {
+		rsp[field[strings.Index(field, ".")+1:]] = err
+	}
+
+	return rsp
+}
 
 func ValidateMobile(field validator.FieldLevel) bool {
 	mobile := field.Field().String()
@@ -12,4 +27,18 @@ func ValidateMobile(field validator.FieldLevel) bool {
 		return false
 	}
 	return true
+}
+
+func HandleValidatorError(ctx *gin.Context, err error) {
+	errs, ok := err.(validator.ValidationErrors)
+	zap.S().Debug("错误！")
+	if !ok {
+		ctx.JSON(http.StatusOK, gin.H{
+			"msg": err.Error(),
+		})
+	}
+
+	ctx.JSON(http.StatusBadRequest, gin.H{
+		"error": removeTopStruct(errs.Translate(global.Trans)),
+	})
 }

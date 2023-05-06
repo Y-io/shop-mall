@@ -2,13 +2,11 @@ package initilize
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"github.com/gin-gonic/gin/binding"
 	"github.com/go-playground/locales/en"
 	"github.com/go-playground/locales/zh"
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
-	"net/http"
 	"reflect"
 	"shop-mall/global"
 	"strings"
@@ -16,16 +14,6 @@ import (
 	en_translations "github.com/go-playground/validator/v10/translations/en"
 	zh_translations "github.com/go-playground/validator/v10/translations/zh"
 )
-
-func removeTopStruct(fields map[string]string) map[string]string {
-	rsp := map[string]string{}
-
-	for field, err := range fields {
-		rsp[field[strings.Index(field, ".")+1:]] = err
-	}
-
-	return rsp
-}
 
 func InitTrans(locale string) (err error) {
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
@@ -64,17 +52,4 @@ func InitTrans(locale string) (err error) {
 		return
 	}
 	return
-}
-
-func HandleValidatorError(ctx *gin.Context, err error) {
-	errs, ok := err.(validator.ValidationErrors)
-	if !ok {
-		ctx.JSON(http.StatusOK, gin.H{
-			"msg": err.Error(),
-		})
-	}
-
-	ctx.JSON(http.StatusBadRequest, gin.H{
-		"error": removeTopStruct(errs.Translate(global.Trans)),
-	})
 }

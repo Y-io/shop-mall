@@ -16,15 +16,15 @@ type UserGetListItem struct {
 }
 
 type UserGetListInput struct {
-	Page int32 `json:"page"` // 分页码
-	Size int32 `json:"size"` // 分页数量
+	Page     int32 `json:"page"`     // 分页码
+	PageSize int32 `json:"pageSize"` // 分页数量
 }
 
 type UserGetListOutput struct {
-	Page  int32 `json:"page"`  // 分页码
-	Size  int32 `json:"size"`  // 分页数量
-	Total int32 `json:"total"` // 数据总数
-	List  []UserGetListItem
+	Page     int32             `json:"page"`     // 分页码
+	PageSize int32             `json:"pageSize"` // 分页数量
+	Total    int32             `json:"total"`    // 数据总数
+	List     []UserGetListItem `json:"list"`
 }
 
 type PassWordLoginInput struct {
