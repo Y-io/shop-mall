@@ -1,0 +1,9 @@
+name: 'shop-mall'
+host: 'localhost'
+port: 8021
+
+mysql:
+  username: 'root'
+  password: 123456
+  port: 3306
+  host: '127.0.0.1'
