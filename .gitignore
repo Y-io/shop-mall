@@ -7,3 +7,4 @@
 .settings/
 .vscode/
 **/.DS_Store
+tmp/
