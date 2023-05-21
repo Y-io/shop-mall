@@ -7,7 +7,7 @@ import (
 type UserGetListItem struct {
 	ID        int32
 	CreatedAt time.Time
-	UpdateAt  time.Time
+	UpdatedAt time.Time
 	Mobile    string
 	NickName  string
 	Birthday  uint64
@@ -27,7 +27,35 @@ type UserGetListOutput struct {
 	List     []UserGetListItem `json:"list"`
 }
 
-type PassWordLoginInput struct {
+type PasswordLoginInput struct {
 	Mobile   string `form:"mobile" json:"mobile" binding:"required"`
-	PassWord string `form:"password" json:"password" binding:"required,min=3,max=20"`
+	Password string `form:"password" json:"password" binding:"required,min=3,max=20"`
+}
+
+type CheckPasswordInput struct {
+	Password          string ` json:"password"`
+	EncryptedPassword string `json:"encryptedPassword"`
+}
+
+type CheckPasswordOutput struct {
+	Success bool
+}
+
+type CreateUserInput struct {
+	Mobile   string `form:"mobile" json:"mobile" binding:"required"`
+	Password string `form:"password" json:"password" binding:"required,min=3,max=20"`
+}
+
+type CreateUserOutput struct {
+	ID        int32
+	CreatedAt time.Time
+	UpdatedAt time.Time
+	Mobile    string
+	NickName  string
+	Birthday  uint64
+	Gender    string
+	Role      int
+}
+
+type Register struct {
 }

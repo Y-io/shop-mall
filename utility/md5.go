@@ -10,7 +10,7 @@ import (
 func genMd5(code string) {
 
 	// Using custom options
-	options := &password.Options{16, 100, 32, sha512.New}
+	options := &password.Options{SaltLen: 16, Iterations: 100, KeyLen: 32, HashFunction: sha512.New}
 	salt, encodedPwd := password.Encode("generic password", options)
 	newPassword := fmt.Sprintf("$pbkdf2-sha512$%s$%s", salt, encodedPwd)
 

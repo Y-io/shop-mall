@@ -8,8 +8,13 @@ type MySqlConfig struct {
 	Database string `mapstructure:"database"`
 }
 
+type JwtConfig struct {
+	SigningKey string `mapstructure:"key"`
+}
+
 type ServerConfig struct {
 	Host  string      `mapstructure:"host"`
 	Port  int         `mapstructure:"port"`
 	MySql MySqlConfig `mapstructure:"mysql"`
+	Jwt   JwtConfig   `mapstructure:"jwt"`
 }

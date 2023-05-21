@@ -6,7 +6,7 @@ import (
 	"net/http"
 	"shop-mall/model"
 	"shop-mall/service"
-	"shop-mall/validator"
+	validatorUtil "shop-mall/validator"
 	"strconv"
 )
 
@@ -19,11 +19,11 @@ func GetUserList(c *gin.Context) {
 	in := model.UserGetListInput{}
 
 	if err := c.ShouldBind(&in); err != nil {
-		validator.HandleValidatorError(c, err)
+		//validator.HandleValidatorError(c, err)
 		return
 	}
 
-	users, err := service.User().GetUserList(model.UserGetListInput{
+	users, err := service.User().GetUserList(c, model.UserGetListInput{
 		Page:     int32(pageInt),
 		PageSize: int32(pageSizeInt),
 	})
@@ -37,11 +37,23 @@ func GetUserList(c *gin.Context) {
 	c.JSON(http.StatusOK, users)
 }
 
-func PassWordLogin(ctx *gin.Context) {
-	in := model.PassWordLoginInput{}
+func PassWordLogin(c *gin.Context) {
+	in := model.PasswordLoginInput{}
 
-	if err := ctx.ShouldBindJSON(&in); err != nil {
-		validator.HandleValidatorError(ctx, err)
+	if err := c.ShouldBind(&in); err != nil {
+		validatorUtil.HandleValidatorError(c, err)
+		return
+	}
+	service.User().PasswordLogin(c, in)
+}
+
+func Register(c *gin.Context) {
+	in := model.CreateUserInput{}
+
+	if err := c.ShouldBind(&in); err != nil {
+		validatorUtil.HandleValidatorError(c, err)
+		return
 	}
 
+	service.User().CreateUser(c, in)
 }

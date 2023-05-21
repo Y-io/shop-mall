@@ -18,13 +18,13 @@ func main() {
 	// 初始化 mysql
 	initilize.InitDB()
 
-	// 初始化路由
-	Router := initilize.Routers()
-
 	// 初始化翻译
 	if err := initilize.InitTrans("zh"); err != nil {
 		zap.S().Panic("多语言初始化失败：", err.Error())
 	}
+
+	// 初始化路由
+	Router := initilize.Routers()
 
 	zap.S().Debugf("启动服务器：http://%s:%d/", global.ServerConfig.Host, global.ServerConfig.Port)
 	if err := Router.Run(fmt.Sprintf(":%d", global.ServerConfig.Port)); err != nil {

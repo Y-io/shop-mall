@@ -2,6 +2,7 @@ package initilize
 
 import (
 	"fmt"
+	"go.uber.org/zap"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
@@ -14,6 +15,7 @@ import (
 )
 
 func InitDB() {
+	zap.S().Debugf("初始化数据库")
 	dsn := fmt.Sprintf("%s:%s@tcp(%s:%d)/%s?charset=utf8mb4&parseTime=True&loc-Local",
 		global.ServerConfig.MySql.UserName,
 		global.ServerConfig.MySql.Password,

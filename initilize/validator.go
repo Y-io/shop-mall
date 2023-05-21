@@ -8,19 +8,21 @@ import (
 	ut "github.com/go-playground/universal-translator"
 	"github.com/go-playground/validator/v10"
 	"reflect"
-	"shop-mall/global"
 	"strings"
 
 	en_translations "github.com/go-playground/validator/v10/translations/en"
 	zh_translations "github.com/go-playground/validator/v10/translations/zh"
+	"go.uber.org/zap"
+
+	"shop-mall/global"
 )
 
 func InitTrans(locale string) (err error) {
+	zap.S().Debugf("初始化多语言")
 	if v, ok := binding.Validator.Engine().(*validator.Validate); ok {
 
 		v.RegisterTagNameFunc(func(field reflect.StructField) string {
 			name := strings.SplitN(field.Tag.Get("json"), ",", 2)[0]
-
 			if name == "-" {
 				return ""
 			}
@@ -40,16 +42,15 @@ func InitTrans(locale string) (err error) {
 
 		switch locale {
 		case "en":
-			en_translations.RegisterDefaultTranslations(v, global.Trans)
+			return en_translations.RegisterDefaultTranslations(v, global.Trans)
 
 		case "zh":
-			zh_translations.RegisterDefaultTranslations(v, global.Trans)
+			return zh_translations.RegisterDefaultTranslations(v, global.Trans)
 
 		default:
-			en_translations.RegisterDefaultTranslations(v, global.Trans)
+			return en_translations.RegisterDefaultTranslations(v, global.Trans)
 		}
-
-		return
 	}
+
 	return
 }

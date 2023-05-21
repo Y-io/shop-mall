@@ -29,16 +29,16 @@ func ValidateMobile(field validator.FieldLevel) bool {
 	return true
 }
 
-func HandleValidatorError(ctx *gin.Context, err error) {
+func HandleValidatorError(c *gin.Context, err error) {
 	errs, ok := err.(validator.ValidationErrors)
-	zap.S().Debug("错误！")
+
 	if !ok {
-		ctx.JSON(http.StatusOK, gin.H{
+		c.JSON(http.StatusOK, gin.H{
 			"msg": err.Error(),
 		})
+		return
 	}
 
-	ctx.JSON(http.StatusBadRequest, gin.H{
-		"error": removeTopStruct(errs.Translate(global.Trans)),
-	})
+	zap.S().Debug("错误", removeTopStruct(errs.Translate(global.Trans)))
+	c.JSON(http.StatusBadRequest, removeTopStruct(errs.Translate(global.Trans)))
 }
