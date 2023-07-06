@@ -1,6 +1,6 @@
 name: 'shop-mall'
 host: 'localhost'
-port: 8021
+port: 8020
 
 mysql:
   username: 'root'
